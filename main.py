@@ -17,10 +17,7 @@ import gzip
 app = FastAPI()
 
 
-@app.get("/")
-def read_root():
-    return ["End Points:", "PlayTimeGenre",'UserForGenre','UserRecommend','SentimentAnalysis']
-
+@app.get("/docs")
 
 @app.get("/items/{item_id}")
 def read_item(item_id: int, q: Union[str, None] = None):
@@ -47,7 +44,7 @@ def sentimentanalysis():
 #ETL for games:
 data = []
 
-with gzip.open('Src\steam_games.json.gz', 'rb') as d:
+with gzip.open('steam_games.json.gz', 'rb') as d:
     for line in d:
         data.append(json.loads(line))
 games = pd.DataFrame(data)
@@ -57,7 +54,7 @@ d.close()
 data = []
 
 try:
-    with gzip.open('Src\\user_reviews.json.gz', 'rb') as d:
+    with gzip.open('user_reviews.json.gz', 'rb') as d:
         for line in d:
             data.append(ast.literal_eval(line.decode('utf-8')))
     reviews = pd.DataFrame(data)
@@ -68,7 +65,7 @@ finally:
 data = []
 
 try:
-    with gzip.open('Src\\users_items.json.gz', 'rb') as d:
+    with gzip.open('users_items.json.gz', 'rb') as d:
         for line in d:
             data.append(ast.literal_eval(line.decode('utf-8')))
     Users_Items = pd.DataFrame(data)
