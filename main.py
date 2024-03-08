@@ -18,6 +18,8 @@ app = FastAPI()
 
 
 @app.get("/docs")
+def read_root():
+    return('.')
 
 @app.get("/items/{item_id}")
 def read_item(item_id: int, q: Union[str, None] = None):
@@ -42,38 +44,3 @@ def sentimentanalysis():
 #ETL section:
 
 #ETL for games:
-data = []
-
-with gzip.open('steam_games.json.gz', 'rb') as d:
-    for line in d:
-        data.append(json.loads(line))
-games = pd.DataFrame(data)
-d.close()
-
-#ETL for user reviews:
-data = []
-
-try:
-    with gzip.open('user_reviews.json.gz', 'rb') as d:
-        for line in d:
-            data.append(ast.literal_eval(line.decode('utf-8')))
-    reviews = pd.DataFrame(data)
-finally:
-    d.close()  # Cerramos el archivo en el bloque 'finally' para garantizar que se cierre correctamente
-
-#ETL for user items:
-data = []
-
-try:
-    with gzip.open('users_items.json.gz', 'rb') as d:
-        for line in d:
-            data.append(ast.literal_eval(line.decode('utf-8')))
-    Users_Items = pd.DataFrame(data)
-finally:
-    d.close()
-    
-#NaN cleaning:
-
-games_clean = games.dropna(how='all')
-reviews_clean = reviews.dropna(how='all')
-items_clean = Users_Items.dropna(how='all')
