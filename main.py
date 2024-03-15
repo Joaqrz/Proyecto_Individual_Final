@@ -26,7 +26,7 @@ async def read_root():
 async def PlayTimeGenre(genero: str):
     try:
         # Leemos el archivo parquet
-        df_genero = pd.read_parquet("Src/endpoint1.parquet")
+        df_genero = pd.read_parquet("src/endpoint1.parquet")
         
         # Filtrar el DataFrame por el género especificado
         df_genero = df_genero[df_genero["genres"] == genero]
@@ -45,7 +45,7 @@ async def PlayTimeGenre(genero: str):
 async def UserForGenre(genero: str):
     try:
         #Leemos el parquet
-        endpoint2 = pd.read_parquet('src/endpoint2.parquet')
+        endpoint2 = pd.read_parquet('src\endpoint2.parquet')
         
         #Convertimos los minutos a horas
         endpoint2['playtime'] = round(endpoint2['playtime']/60,2)
