@@ -2,4 +2,7 @@ fastapi
 uvicorn
 typing
 pandas
-
+matplotlib
+pyarrow
+fastparquet
+scikit-learn
