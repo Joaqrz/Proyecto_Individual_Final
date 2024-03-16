@@ -45,7 +45,7 @@ async def PlayTimeGenre(genero: str):
 async def UserForGenre(genero: str):
     try:
         #Leemos el parquet
-        endpoint2 = pd.read_parquet('src\endpoint2.parquet')
+        endpoint2 = pd.read_parquet('src/endpoint2.parquet')
         
         #Convertimos los minutos a horas
         endpoint2['playtime'] = round(endpoint2['playtime']/60,2)
@@ -174,9 +174,9 @@ def SentimentAnalysis(desarrolladora:str):
         df_developer = df_sentiment[df_sentiment['developer'] == desarrolladora]
         
         #Contabilizamos las reviews
-        positive_count = (df_developer['sentiment_analysis'] == 2).sum()
-        neutral_count = (df_developer['sentiment_analysis'] == 1).sum()
-        negative_count = (df_developer['sentiment_analysis'] == 0).sum()
+        positive_count = df_developer[df_developer['sentiment_analysis'] == 2].shape[0]
+        neutral_count = df_developer[df_developer['sentiment_analysis'] == 1].shape[0]
+        negative_count = df_developer[df_developer['sentiment_analysis'] == 0].shape[0]
         
         #Creamos el diccionario solicitado:
         result_dicc = {
@@ -193,12 +193,19 @@ def SentimentAnalysis(desarrolladora:str):
 
 #------------------------------------------------------------------------------------------------------------#
 
-@app.get("recomendacion_juego/{id_producto}")
-def recomendacion_juego(id: int):
-    # Leemos el dataset 
-    games_ML = pd.read_parquet('src/games_ML.parquet')
+@app.get("/recomendacion_juego/{id_producto}")
+def recommend_games(id: int):
+    '''
+    Esta función recomienda 5 juegos a partir del juego ingresado.
+
+    Args:
+        game_id (int): ID único del videojuego al cual se le harán las recomendaciones.
+    '''
+    # Lee el dataset:
+    modelo_render = pd.read_parquet('src/modelo_render.parquet')
+    
     # Verifica si el juego con game_id existe en df_games
-    game = games_ML[games_ML['id'] == id]
+    game = modelo_render[modelo_render['id'] == id]
 
     if game.empty:
         return("El juego '{id}' no posee registros.")
@@ -208,10 +215,10 @@ def recomendacion_juego(id: int):
 
     # Toma una muestra aleatoria del DataFrame df_games
     sample_size = 2000  # Define el tamaño de la muestra (ajusta según sea necesario)
-    df_sample = games_ML.sample(n=sample_size, random_state=42)  # Ajusta la semilla aleatoria según sea necesario
+    df_sample = modelo_render.sample(n=sample_size, random_state=42)  # Ajusta la semilla aleatoria según sea necesario
 
     # Calcula la similitud de contenido solo para el juego dado y la muestra
-    sim_scores = cosine_similarity([games_ML.iloc[idx, 3:]], df_sample.iloc[:, 3:])
+    sim_scores = cosine_similarity([modelo_render.iloc[idx, 3:]], df_sample.iloc[:, 3:])
 
     # Obtiene las puntuaciones de similitud del juego dado con otros juegos
     sim_scores = sim_scores[0]
@@ -226,6 +233,6 @@ def recomendacion_juego(id: int):
     # Lista de juegos similares (solo nombres)
     similar_game_names = df_sample['title'].iloc[similar_game_indices].tolist()
 
-    return {f"Juegos Similares": similar_game_names}
+    return {"similar_games": similar_game_names}
 #------------------------------------------------------------------------------------------------------------#
 
