@@ -1,4 +1,4 @@
-# Proyecto_Individual_Final
+# Proyecto Individual Final
 Proyecto Individual del bootcamp de data cience HENRY
 
 ## Descripcíon:
@@ -16,5 +16,5 @@ Proyecto Individual del bootcamp de data cience HENRY
 * 'requirements.txt', archivo escencial para el funcionamiento del deploy en Render. Contiene las librerías necesarias para el funcionamiento de las funciones
 ## Uso:
 #### Link a la API: https://proyecto-individual-final-hxu4.onrender.com/#/
-#### Link al tutorial de uso: 
+#### Link al tutorial de uso: https://youtu.be/zw3AVGwqitQ
  
