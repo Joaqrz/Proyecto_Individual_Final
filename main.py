@@ -24,6 +24,12 @@ async def read_root():
 
 @app.get("/PlayTimeGenre/{genero}") #PlayTime por genero 
 async def PlayTimeGenre(genero: str):
+    '''Recibe un género (str) y devuelve el año de lanzamiento con más horas jugadas
+    *Ejemplo:
+        {
+        "Año de lanzamiento con más horas jugadas para Action": 2012
+        }
+    '''
     try:
         # Leemos el archivo parquet
         df_genero = pd.read_parquet("src/endpoint1.parquet")
@@ -43,6 +49,53 @@ async def PlayTimeGenre(genero: str):
 
 @app.get("/UserForGenre/{genre}") #usuario con más horas jugadas por género 
 async def UserForGenre(genero: str):
+    """
+    Recibe un género (str) y devuelve el usuario con más horas jugadas junto al acumulado de horas por año.
+    * Ejemplo:
+            {
+        "Usuario con más horas jugadas para Action": "Evilutional",
+        "Horas jugadas": [
+            {
+            "Año": 2009,
+            "Horas": 33.95
+            },
+            {
+            "Año": 2010,
+            "Horas": 68.37
+            },
+            {
+            "Año": 2011,
+            "Horas": 32.8
+            },
+            {
+            "Año": 2012,
+            "Horas": 11349.85
+            },
+            {
+            "Año": 2013,
+            "Horas": 1162.1
+            },
+            {
+            "Año": 2014,
+            "Horas": 403.77
+            },
+            {
+            "Año": 2015,
+            "Horas": 1.87
+            },
+            {
+            "Año": 2016,
+            "Horas": 21.52
+            },
+            {
+            "Año": 2017,
+            "Horas": 181.57
+            }
+        ]
+        }
+
+
+    """
     try:
         #Leemos el parquet
         endpoint2 = pd.read_parquet('src/endpoint2.parquet')
@@ -72,6 +125,23 @@ async def UserForGenre(genero: str):
 
 @app.get("/UserRecommend/{year}") # Juego más recomendado por los usuarios anualmente 
 async def UsersRecommend(year: int):
+    """ 
+    Recibe un año (int) y devuelve el top 3 de juegos más recomendo por los usuarios
+    *Ejemplo:
+    [
+    {
+        "Puesto 1": "Team Fortress 2"
+    },
+    {
+        "Puesto 2": "Counter-Strike: Global Offensive"
+    },
+    {
+        "Puesto 3": "Garry's Mod"
+    }
+    ]
+    
+    
+    """
     try:
         # Leemos el archivo
         df = pd.read_parquet('src/reviews.parquet')
@@ -119,6 +189,23 @@ async def UsersRecommend(year: int):
 
 @app.get('/UsersWorstDeveloper/{year}')
 def UsersWorstDeveloper(year:int):
+    """ 
+    Recibe un año (int) y devuelve el top 3 de los peores desarrolladores según los usuarios
+    *Ejemplo:
+    [
+    {
+        "Puesto 1": "2K Australia,Gearbox Software,Aspyr (Mac and Linux)"
+    },
+    {
+        "Puesto 2": "Silesia Games Sp. z o.o."
+    },
+    {
+        "Puesto 3": "Reloaded Productions"
+    }
+    ]
+    
+    """
+
     try:
         # Leemos el archivo
         df = pd.read_parquet('src/reviews.parquet')
@@ -166,6 +253,17 @@ def UsersWorstDeveloper(year:int):
 
 @app.get("/SentimentAnalysis/{developer}") # Sentiment analysis per developer function 
 def SentimentAnalysis(desarrolladora:str):
+    """ 
+    Recibe como parámetro un desarrollador y devuelve el sentiment analysis del mismo
+    *Ejemplo:
+    {
+    "Desarrolladora": "Ubisoft",
+    "Reviews Positivas": 83,
+    "Reviews Neutras": 1,
+    "Reviews Negativas": 35
+    }    
+    
+    """
     try:
         #Leemos el archivo    
         df_sentiment = pd.read_parquet('src/reviews.parquet')
@@ -196,10 +294,18 @@ def SentimentAnalysis(desarrolladora:str):
 @app.get("/recomendacion_juego/{id_producto}")
 def recommend_games(id: int):
     '''
-    Esta función recomienda 5 juegos a partir del juego ingresado.
-
-    Args:
-        game_id (int): ID único del videojuego al cual se le harán las recomendaciones.
+    Esta función recomienda 5 juegos a partir del id del juego ingresado (int).
+    *Ejemplo:
+    {
+  "similar_games": [
+                    "Mafia II DLC: Joe's Adventure",
+                    "Singularity™",
+                    "Gotham City Impostors Free to Play: Premium Card Pack 1",
+                    "Call of Duty: World at War",
+                    "Saints Row: The Third - Nyte Blayde Pack"
+                    ]
+    }
+    
     '''
     # Lee el dataset:
     modelo_render = pd.read_parquet('src/modelo_render.parquet')
