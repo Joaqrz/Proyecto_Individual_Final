@@ -1,5 +1,5 @@
 # Proyecto Individual Final
-Proyecto Individual del bootcamp de data cience HENRY
+Proyecto Individual del bootcamp de data science HENRY
 
 ## Descripcíon:
 * Elabolarción de un ETL (Extract, Transform, Load) riguroso teniendo presentes las limitaciones técnicas del hardware utilizado. Limpeza de datos, transformaciones de tipos de datos y cargas de datos en datasets más pequeños con datos específicos para cada función.
